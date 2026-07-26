@@ -1,0 +1,45 @@
+--- src/App.tsx
++++ src/App.tsx
+@@ -1122,10 +1122,6 @@
+       alert('يرجى إدخال كلمة السر لحماية الملف.');
+       return;
+     }
+-    if (protectPassword !== protectConfirmPassword) {
+-      alert('كلمتا السر غير متطابقتين. يرجى التأكد وإعادة المحاولة.');
+-      return;
+-    }
+ 
+     setIsProtecting(true);
+     setProtectResult(null);
+@@ -1163,10 +1159,12 @@
+       const cleanName = selectedProtectFile.name.replace(/\.pdf$/i, '');
+ 
+-      setProtectResult({
+-        blob,
+-        fileName: `${cleanName}_protected.pdf`,
+-      });
++      saveAs(blob, `${cleanName}_protected.pdf`);
++      setShowProtectModal(false);
++      setSelectedProtectFile(null);
++      setProtectPassword('');
++      setProtectConfirmPassword('');
++      
+     } catch (error: any) {
+       console.error('Error protecting PDF:', error);
+       alert(error.message || 'حدث خطأ أثناء حماية ملف PDF. يرجى المحاولة مرة أخرى.');
+@@ -1257,10 +1255,11 @@
+       const cleanName = selectedUnlockFile.name.replace(/\.pdf$/i, '');
+ 
+-      setUnlockResult({
+-        blob,
+-        fileName: `${cleanName}_unlocked.pdf`,
+-      });
++      saveAs(blob, `${cleanName}_unlocked.pdf`);
++      setShowUnlockModal(false);
++      setSelectedUnlockFile(null);
++      setUnlockPassword('');
++      setUnlockError(null);
++      
+     } catch (error: any) {
+       console.error('Error unlocking PDF:', error);
+       setUnlockError(error.message || 'كلمة السر غير صحيحة أو يتعذر فك تشفير هذا الملف.');
